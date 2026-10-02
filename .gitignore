@@ -46,3 +46,8 @@ next-env.d.ts
 
 # local Claude Code preview config
 /.claude/
+
+# end-to-end tests
+/.next-e2e/
+/test-results/
+/playwright-report/

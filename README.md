@@ -47,6 +47,17 @@ Set `RESEND_API_KEY`, `EMAIL_FROM` (a verified domain in Resend) and optionally
 
 Emails sent: request received (player), new request (coach), confirmed (player), cancelled (player), contact message (coach).
 
+## Testing
+
+| Command | What it checks |
+| --- | --- |
+| `npm run check` | Lint, types, unit tests and database tests (PGlite, real migrations) |
+| `npm run test:e2e` | **57 end-to-end scenarios** in a real browser (installed Chrome): every public page in EN/FR, the booking rules (24 h → 7 days, double booking, packs, anti-spam, validation) and every coach-dashboard function. Runs a separate demo-mode build on port 3100 — never touches the real database. Report: `npx playwright show-report` |
+| `npx supabase db query --linked -f supabase/tests/live-rollback-check.sql` | 21 booking/security rules on the **live** database inside a transaction that is rolled back — nothing is saved |
+| `npx supabase db advisors --linked` | Supabase security & performance advisor |
+
+Run `npm run check` and `npm run test:e2e` before every deploy.
+
 ## Editing content
 
 | What | Where |

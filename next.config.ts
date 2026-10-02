@@ -18,7 +18,8 @@ const csp = [
   "base-uri 'self'",
   "form-action 'self'",
   "frame-ancestors 'none'",
-  ...(isDev ? [] : ["upgrade-insecure-requests"]),
+  // Vercel always serves HTTPS; a local production build (e.g. the E2E tests) runs on http.
+  ...(process.env.VERCEL ? ["upgrade-insecure-requests"] : []),
 ].join("; ");
 
 const securityHeaders = [
@@ -30,6 +31,8 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // The E2E tests build a separate demo-mode copy of the site (see playwright.config.ts).
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];
   },
