@@ -21,8 +21,15 @@ the dev server restarts. Demo mode is disabled in production builds.
 ## Connect Supabase (production)
 
 1. Create a project at [supabase.com](https://supabase.com).
-2. **SQL Editor** → run every file in `supabase/migrations/` **in filename order**, then `supabase/seed.sql`
-   (or `supabase db push` with the Supabase CLI, then the seed).
+2. Create the database with the Supabase CLI (installed with `npm install`):
+   ```bash
+   npm run db:login    # opens the browser to sign in to Supabase
+   npm run db:link     # links this folder to the project (asks for the database password)
+   npm run db:setup    # first time only: all migrations + seed data
+   ```
+   Later schema changes: add a file to `supabase/migrations/` and run `npm run db:push`
+   (never `db:setup` again — the seed is for an empty database).
+   Without the CLI: run every file in `supabase/migrations/` in filename order in the SQL Editor, then `supabase/seed.sql`.
 3. Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SUPABASE_URL` and
    `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (Project Settings → API).
 4. **Create the coach account:** Authentication → Users → *Add user* (email + password). Then in the SQL Editor:
