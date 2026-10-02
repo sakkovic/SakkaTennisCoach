@@ -1,3 +1,4 @@
+import { unstable_rethrow } from "next/navigation";
 import { siteConfig } from "@/config/site";
 import { InstagramIcon } from "@/components/ui/BrandIcons";
 import { ButtonAnchor, ButtonLink } from "@/components/ui/Button";
@@ -17,6 +18,7 @@ async function loadPosts(): Promise<JourneyPost[]> {
   try {
     return await getRepository().listJourneyPosts({ limit: 10, order: "recent" });
   } catch (err) {
+    unstable_rethrow(err); // let Next.js handle its own signals (dynamic rendering, redirects)
     console.error("[journey] failed to load posts", err);
     return [];
   }

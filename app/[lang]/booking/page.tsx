@@ -1,3 +1,4 @@
+import { unstable_rethrow } from "next/navigation";
 import { Suspense } from "react";
 import { CalendarOff } from "lucide-react";
 import { whatsappUrl } from "@/config/site";
@@ -38,6 +39,7 @@ async function loadBookingData(locale: Locale) {
       bookingWindow: { minNoticeHours: settings.minNoticeHours, maxAdvanceDays: settings.maxAdvanceDays },
     };
   } catch (err) {
+    unstable_rethrow(err); // let Next.js handle its own signals (dynamic rendering, redirects)
     console.error("[booking] failed to load data", err);
     return null;
   }

@@ -1,3 +1,4 @@
+import { unstable_rethrow } from "next/navigation";
 import { ImageOff } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { images } from "@/content/images";
@@ -28,6 +29,7 @@ async function loadPosts(): Promise<JourneyPost[]> {
   try {
     return await getRepository().listJourneyPosts();
   } catch (err) {
+    unstable_rethrow(err); // let Next.js handle its own signals (dynamic rendering, redirects)
     console.error("[journey] failed to load posts", err);
     return [];
   }

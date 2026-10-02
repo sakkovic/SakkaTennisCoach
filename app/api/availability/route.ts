@@ -1,3 +1,4 @@
+import { unstable_rethrow } from "next/navigation";
 import { NextResponse, type NextRequest } from "next/server";
 import { getRepository } from "@/lib/data";
 import { isBookingEnabled } from "@/lib/env";
@@ -35,6 +36,7 @@ export async function GET(request: NextRequest) {
     const dates = from > to ? [] : await repo.getAvailableDates(service, location, from, to);
     return NextResponse.json({ dates, today, lastBookable }, { headers });
   } catch (err) {
+    unstable_rethrow(err); // let Next.js handle its own signals (dynamic rendering, redirects)
     console.error("[availability]", err);
     return NextResponse.json({ error: "server_error" }, { status: 500, headers });
   }

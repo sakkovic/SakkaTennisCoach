@@ -1,3 +1,4 @@
+import { unstable_rethrow } from "next/navigation";
 import { CalendarClock } from "lucide-react";
 import { images } from "@/content/images";
 import { ProgramCard } from "@/components/coaching/ProgramCard";
@@ -43,6 +44,7 @@ async function loadCatalog(locale: Locale): Promise<Catalog> {
       window: { minNoticeHours: settings.minNoticeHours, maxAdvanceDays: settings.maxAdvanceDays },
     };
   } catch (err) {
+    unstable_rethrow(err); // let Next.js handle its own signals (dynamic rendering, redirects)
     console.error("[coaching] failed to load services", err);
     return { services: [], packages: [], window: null };
   }
