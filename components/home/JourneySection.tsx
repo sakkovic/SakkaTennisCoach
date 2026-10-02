@@ -15,7 +15,7 @@ import { localizeJourneyPost } from "@/lib/i18n/localize";
 async function loadPosts(): Promise<JourneyPost[]> {
   if (!isBookingEnabled) return [];
   try {
-    return await getRepository().listJourneyPosts({ limit: 10 });
+    return await getRepository().listJourneyPosts({ limit: 10, order: "recent" });
   } catch (err) {
     console.error("[journey] failed to load posts", err);
     return [];

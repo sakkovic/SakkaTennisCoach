@@ -100,7 +100,8 @@ export interface Repository {
   deletePackage(id: string): Promise<AdminResult>;
 
   // ---- Journey (achievements / photos / news) -------------------------------
-  listJourneyPosts(opts?: { includeUnpublished?: boolean; limit?: number }): Promise<JourneyPost[]>;
+  /** order "featured" (default): featured first, then newest. "recent": newest first, ignoring the featured flag. */
+  listJourneyPosts(opts?: { includeUnpublished?: boolean; limit?: number; order?: "featured" | "recent" }): Promise<JourneyPost[]>;
   saveJourneyPost(input: JourneyPostInput): Promise<AdminResult>;
   deleteJourneyPost(id: string): Promise<AdminResult>;
   uploadJourneyImage(file: File): Promise<{ ok: true; url: string } | { ok: false; error: string }>;

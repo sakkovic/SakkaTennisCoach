@@ -697,12 +697,9 @@ export const supabaseRepository: Repository = {
 
   async listJourneyPosts(opts) {
     const supabase = await db();
-    let query = supabase
-      .from("journey_posts")
-      .select("*")
-      .order("is_featured", { ascending: false })
-      .order("happened_on", { ascending: false })
-      .order("created_at", { ascending: false });
+    let query = supabase.from("journey_posts").select("*");
+    if (opts?.order !== "recent") query = query.order("is_featured", { ascending: false });
+    query = query.order("happened_on", { ascending: false }).order("created_at", { ascending: false });
     if (!opts?.includeUnpublished) query = query.eq("is_published", true);
     if (opts?.limit) query = query.limit(opts.limit);
     const { data, error } = await query;

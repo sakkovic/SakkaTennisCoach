@@ -464,7 +464,10 @@ export const demoRepository: Repository = {
 
   async listJourneyPosts(opts) {
     const posts = journey(store()).filter((p) => opts?.includeUnpublished || p.isPublished);
-    const sorted = posts.sort((a, b) => Number(b.isFeatured) - Number(a.isFeatured) || b.happenedOn.localeCompare(a.happenedOn));
+    const featured = (p: (typeof posts)[number]) => (opts?.order === "recent" ? 0 : Number(p.isFeatured));
+    const sorted = posts.sort(
+      (a, b) => featured(b) - featured(a) || b.happenedOn.localeCompare(a.happenedOn) || b.createdAt.localeCompare(a.createdAt),
+    );
     return opts?.limit ? sorted.slice(0, opts.limit) : sorted;
   },
 
