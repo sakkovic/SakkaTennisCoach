@@ -1,0 +1,156 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Design tokens — "Baseline" design system
+   Colors are semantic; components never use raw hex values.
+------------------------------------------------------------------- */
+@theme {
+  /* Brand */
+  --color-ink: #071c2c; /* deepest navy: hero, dark sections, text on light */
+  --color-navy: #0b2d46; /* dark cards, admin sidebar */
+  --color-navy-700: #123d5c; /* hover on dark surfaces */
+  --color-navy-600: #1a4b6e;
+  --color-lime: #d7f530; /* accent only: CTA, active, lines, badges */
+  --color-lime-hover: #c4e21f;
+  --color-lime-ink: #5c6e00; /* lime-tinted text on white (5.7:1) */
+  --color-sky: #8fc8e8;
+  --color-sky-50: #eaf4fa;
+
+  /* Neutrals */
+  --color-surface: #f5f7f8;
+  --color-line: #e3e8eb;
+  --color-muted: #5b6b78; /* secondary text on light (5.5:1) */
+  --color-muted-dark: #8a98a5; /* secondary text on navy (5.9:1) */
+
+  /* Feedback */
+  --color-success: #15803d;
+  --color-success-50: #ecfdf3;
+  --color-warning: #b45309;
+  --color-warning-50: #fff7e6;
+  --color-danger: #c62828;
+  --color-danger-50: #fdecec;
+
+  /* Radius */
+  --radius-input: 12px;
+  --radius-card: 20px;
+  --radius-media: 24px;
+
+  /* Elevation (light surfaces only — dark surfaces use borders) */
+  --shadow-soft: 0 1px 2px rgb(7 28 44 / 0.06), 0 8px 24px rgb(7 28 44 / 0.06);
+  --shadow-lift: 0 1px 2px rgb(7 28 44 / 0.06), 0 24px 48px -16px rgb(7 28 44 / 0.22);
+  --shadow-glow: 0 10px 30px -10px rgb(215 245 48 / 0.55);
+
+  /* Motion */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+
+  /* Layering */
+  --z-index-nav: 40;
+}
+
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bebas), "Arial Narrow", Impact, sans-serif;
+}
+
+/* ------------------------------------------------------------------
+   Base
+------------------------------------------------------------------- */
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    background-color: #ffffff;
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv11", "ss01";
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--color-lime);
+    color: var(--color-ink);
+  }
+
+  /* Visible, on-brand focus ring everywhere. Dark sections override with .on-dark */
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  .on-dark :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline-color: var(--color-lime);
+  }
+
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+
+  button,
+  a {
+    touch-action: manipulation;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------
+   Utilities
+------------------------------------------------------------------- */
+@utility font-display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
+@utility text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px rgb(255 255 255 / 0.14);
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Hero entrance — pure CSS so it runs before hydration (no LCP delay) */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes settle {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: none;
+  }
+}
+@utility hero-rise {
+  animation: rise 0.7s var(--ease-out-quart) both;
+}
+@utility hero-zoom {
+  animation: settle 1.6s var(--ease-out-quart) both;
+}
+
+@utility safe-bottom {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+}

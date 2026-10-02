@@ -1,0 +1,333 @@
+import type { AvailabilityRule, CoachSettings, JourneyPost, Location, Package, Service } from "@/lib/booking/types";
+
+/** Lesson packs (mirrors supabase/seed.sql). */
+export const demoPackages: Package[] = [
+  { id: "pack-5", name: "5-Lesson Pack", description: "5 lessons to use within a month.", lessonsCount: 5, discountPercent: 5, validityDays: 30, isActive: true, sortOrder: 1, serviceIds: [], nameFr: "Forfait 5 cours", descriptionFr: "5 cours à utiliser dans le mois." },
+  { id: "pack-10", name: "10-Lesson Pack", description: "10 lessons to use within a month — best value.", lessonsCount: 10, discountPercent: 10, validityDays: 30, isActive: true, sortOrder: 2, serviceIds: [], nameFr: "Forfait 10 cours", descriptionFr: "10 cours à utiliser dans le mois — le meilleur prix." },
+];
+
+const unsplash = (id: string) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&q=80`;
+
+/** SAMPLE journey posts for demo mode — the real site starts empty (posted from /admin/journey). */
+const journeyFr: Record<string, Pick<JourneyPost, "titleFr" | "bodyFr" | "resultFr">> = {
+  "jp-1": { titleFr: "Vainqueur du tournoi", bodyFr: "Exemple — un moment de fierté à célébrer. Remplacez-le depuis le tableau de bord par un vrai résultat.", resultFr: "Vainqueur" },
+  "jp-2": { titleFr: "Séance de nuit sous les projecteurs", bodyFr: "Lance-balles, cibles et beaucoup de répétitions.", resultFr: null },
+  "jp-3": { titleFr: "Première finale en tournoi", bodyFr: "Exemple — des mois de travail qui paient.", resultFr: "Finaliste" },
+  "jp-4": { titleFr: "Le jeu de jambes d'abord", bodyFr: "Chaque grand coup commence par les pieds.", resultFr: null },
+  "jp-5": { titleFr: "Nouveaux cours collectifs cette saison", bodyFr: "Les entraînements en petit groupe (3–4 joueurs) sont ouverts à la réservation.", resultFr: null },
+  "jp-6": { titleFr: "Travail au service", bodyFr: null, resultFr: null },
+};
+
+const demoJourneyBase: Array<Omit<JourneyPost, "titleFr" | "bodyFr" | "resultFr">> = [
+  {
+    id: "jp-1",
+    kind: "achievement",
+    title: "Tournament winner",
+    body: "Sample post — a proud moment worth celebrating. Replace it from the dashboard with a real result.",
+    imageUrl: unsplash("1714840961998-8d6c02ace00b"),
+    imageAlt: "Player hitting a forehand during a match",
+    playerName: "Sample player",
+    eventName: "Club Championship U16",
+    result: "Winner",
+    happenedOn: "2026-09-20",
+    isPublished: true,
+    isFeatured: true,
+    createdAt: "2026-09-20T18:00:00.000Z",
+  },
+  {
+    id: "jp-2",
+    kind: "photo",
+    title: "Night session under the lights",
+    body: "Ball machine, targets and a lot of repetitions.",
+    imageUrl: "/images/sakkaTennishomepage1.jpg",
+    imageAlt: "Sami Sakka on a floodlit court with training equipment",
+    playerName: null,
+    eventName: null,
+    result: null,
+    happenedOn: "2026-09-15",
+    isPublished: true,
+    isFeatured: false,
+    createdAt: "2026-09-15T20:00:00.000Z",
+  },
+  {
+    id: "jp-3",
+    kind: "achievement",
+    title: "First tournament final",
+    body: "Sample post — months of work paying off.",
+    imageUrl: unsplash("1646343253545-9171464ce425"),
+    imageAlt: "Close-up of a racquet meeting the ball",
+    playerName: "Sample player",
+    eventName: "Regional Junior Open",
+    result: "Finalist",
+    happenedOn: "2026-09-06",
+    isPublished: true,
+    isFeatured: false,
+    createdAt: "2026-09-06T18:00:00.000Z",
+  },
+  {
+    id: "jp-4",
+    kind: "photo",
+    title: "Footwork first",
+    body: "Every great shot starts with the feet.",
+    imageUrl: unsplash("1599586120429-48281b6f0ece"),
+    imageAlt: "Footwork detail during a rally",
+    playerName: null,
+    eventName: null,
+    result: null,
+    happenedOn: "2026-08-28",
+    isPublished: true,
+    isFeatured: false,
+    createdAt: "2026-08-28T18:00:00.000Z",
+  },
+  {
+    id: "jp-5",
+    kind: "news",
+    title: "New group sessions this season",
+    body: "Small-group training for 3–4 players is open for booking.",
+    imageUrl: unsplash("1545151414-8a948e1ea54f"),
+    imageAlt: "Player on court seen from above",
+    playerName: null,
+    eventName: null,
+    result: null,
+    happenedOn: "2026-08-15",
+    isPublished: true,
+    isFeatured: false,
+    createdAt: "2026-08-15T18:00:00.000Z",
+  },
+  {
+    id: "jp-6",
+    kind: "photo",
+    title: "Serve practice",
+    body: null,
+    imageUrl: unsplash("1614743758466-e569f4791116"),
+    imageAlt: "Player serving during daytime",
+    playerName: null,
+    eventName: null,
+    result: null,
+    happenedOn: "2026-08-02",
+    isPublished: true,
+    isFeatured: false,
+    createdAt: "2026-08-02T18:00:00.000Z",
+  },
+];
+
+/**
+ * Sample data for local demo mode. Mirrors supabase/seed.sql.
+ * SAMPLE prices, locations and hours — edit from /admin.
+ */
+
+export const demoSettings: CoachSettings = {
+  timezone: "Africa/Tunis",
+  currency: "USD",
+  slotIntervalMin: 30,
+  minNoticeHours: 24,
+  maxAdvanceDays: 7,
+  bufferMin: 0,
+  maxPendingPerEmail: 3,
+};
+
+export const demoLocations: Location[] = [
+  {
+    id: "loc-hammam-sousse",
+    slug: "tennis-club-hammam-sousse",
+    name: "Tennis Club Hammam Sousse",
+    address: "Hammam Sousse",
+    city: "Sousse, Tunisia",
+    mapsUrl: "https://maps.app.goo.gl/ZFQmQ9ox8x2ovXM58",
+    isActive: true,
+    sortOrder: 1,
+  },
+];
+
+/** Empty = every active location (currently Tennis Club Hammam Sousse). */
+const tennisVenues: string[] = [];
+
+type FrServiceFields = "nameFr" | "shortDescriptionFr" | "descriptionFr" | "bestForFr" | "includesFr";
+const demoServicesBase: Array<Omit<Service, FrServiceFields>> = [
+  {
+    id: "svc-private",
+    slug: "private-lesson",
+    name: "Private Tennis Lesson",
+    shortDescription: "One-to-one coaching built entirely around your game.",
+    description: "The fastest way to improve. Every minute of the session is focused on you — your technique, your tactics and your goals.",
+    bestFor: "Players looking for individualized coaching.",
+    includes: ["Technical corrections", "Tactical coaching", "Personalized drills", "Match preparation"],
+    durationMin: 60,
+    priceCents: 6000,
+    currency: "USD",
+    pricingUnit: "per_session",
+    minPlayers: 1,
+    maxPlayers: 1,
+    isBookable: true,
+    isActive: true,
+    sortOrder: 1,
+    imagePath: null,
+    locationIds: tennisVenues,
+  },
+  {
+    id: "svc-semi",
+    slug: "semi-private-lesson",
+    name: "Semi-Private Lesson",
+    shortDescription: "Train with a partner — personal attention, shared cost.",
+    description: "Ideal for friends, couples or doubles partners of a similar level who want focused coaching and live-ball rallies.",
+    bestFor: "Two players of a similar level.",
+    includes: ["Technical work for both players", "Live-ball drills", "Doubles & singles patterns", "Shared cost"],
+    durationMin: 60,
+    priceCents: 4000,
+    currency: "USD",
+    pricingUnit: "per_player",
+    minPlayers: 2,
+    maxPlayers: 2,
+    isBookable: true,
+    isActive: true,
+    sortOrder: 2,
+    imagePath: null,
+    locationIds: tennisVenues,
+  },
+  {
+    id: "svc-group",
+    slug: "group-training",
+    name: "Group Training",
+    shortDescription: "Small-group sessions with match-like intensity.",
+    description: "Dynamic sessions for 3–4 players combining drills, situational play and competitive games.",
+    bestFor: "Small groups of 3–4 players.",
+    includes: ["Drills & situational play", "Point play & games", "Consistency & movement", "Best value per player"],
+    durationMin: 90,
+    priceCents: 3000,
+    currency: "USD",
+    pricingUnit: "per_player",
+    minPlayers: 3,
+    maxPlayers: 4,
+    isBookable: true,
+    isActive: true,
+    sortOrder: 3,
+    imagePath: null,
+    locationIds: tennisVenues,
+  },
+  {
+    id: "svc-competition",
+    slug: "competition-training",
+    name: "Competition Training",
+    shortDescription: "Performance training for competitive players.",
+    description: "High-intensity sessions for tournament and ranked players, with tactical planning and match analysis.",
+    bestFor: "Competitive and tournament players.",
+    includes: ["High-intensity drills", "Match-play scenarios", "Tactical game plans", "Mental & tournament preparation"],
+    durationMin: 90,
+    priceCents: 9000,
+    currency: "USD",
+    pricingUnit: "per_session",
+    minPlayers: 1,
+    maxPlayers: 2,
+    isBookable: true,
+    isActive: true,
+    sortOrder: 4,
+    imagePath: null,
+    locationIds: tennisVenues,
+  },
+  {
+    id: "svc-junior",
+    slug: "junior-development",
+    name: "Junior Development",
+    shortDescription: "Age-appropriate coaching for young players.",
+    description: "Fun, structured sessions that build strong fundamentals, coordination and a lasting love for the game.",
+    bestFor: "Juniors of all levels.",
+    includes: ["Fundamentals & coordination", "Age-appropriate progressions", "Movement & agility", "Match introduction"],
+    durationMin: 60,
+    priceCents: 5000,
+    currency: "USD",
+    pricingUnit: "per_session",
+    minPlayers: 1,
+    maxPlayers: 1,
+    isBookable: true,
+    isActive: true,
+    sortOrder: 5,
+    imagePath: null,
+    locationIds: tennisVenues,
+  },
+  {
+    id: "svc-padel",
+    slug: "padel-coaching",
+    name: "Padel Coaching",
+    shortDescription: "Technical and tactical coaching for padel.",
+    description: "Learn the specific techniques and positioning of padel, from the basics to advanced wall play.",
+    bestFor: "Padel players of every level.",
+    includes: ["Padel technique", "Wall play", "Positioning & tactics", "Doubles strategy"],
+    durationMin: 60,
+    priceCents: 6000,
+    currency: "USD",
+    pricingUnit: "per_session",
+    minPlayers: 1,
+    maxPlayers: 4,
+    isBookable: true,
+    isActive: true,
+    sortOrder: 6,
+    imagePath: null,
+    locationIds: [],
+  },
+];
+
+/** French versions (mirrors supabase/seed.sql). */
+const servicesFr: Record<string, Pick<Service, FrServiceFields>> = {
+  "svc-private": {
+    nameFr: "Cours de tennis particulier",
+    shortDescriptionFr: "Un coaching individuel entièrement construit autour de votre jeu.",
+    descriptionFr: "La façon la plus rapide de progresser. Chaque minute de la séance est consacrée à vous — votre technique, votre tactique et vos objectifs.",
+    bestForFr: "Les joueurs qui veulent un coaching individualisé.",
+    includesFr: ["Corrections techniques", "Coaching tactique", "Exercices personnalisés", "Préparation au match"],
+  },
+  "svc-semi": {
+    nameFr: "Cours semi-privé",
+    shortDescriptionFr: "Entraînez-vous à deux — une attention personnelle, un coût partagé.",
+    descriptionFr: "Idéal pour des amis, un couple ou des partenaires de double de niveau proche qui veulent un coaching ciblé et des échanges en balle réelle.",
+    bestForFr: "Deux joueurs de niveau proche.",
+    includesFr: ["Travail technique pour les deux joueurs", "Exercices en balle réelle", "Schémas de jeu en simple et double", "Coût partagé"],
+  },
+  "svc-group": {
+    nameFr: "Entraînement en groupe",
+    shortDescriptionFr: "Des séances en petit groupe, avec l'intensité d'un match.",
+    descriptionFr: "Des séances dynamiques pour 3 à 4 joueurs, mêlant exercices, situations de jeu et matchs à thème.",
+    bestForFr: "Petits groupes de 3 à 4 joueurs.",
+    includesFr: ["Exercices & situations de jeu", "Jeu au point & matchs", "Régularité & déplacements", "Le meilleur prix par joueur"],
+  },
+  "svc-competition": {
+    nameFr: "Entraînement compétition",
+    shortDescriptionFr: "Un entraînement de performance pour les compétiteurs.",
+    descriptionFr: "Des séances intenses pour les joueurs classés et de tournoi, avec planification tactique et analyse de match.",
+    bestForFr: "Joueurs de compétition et de tournoi.",
+    includesFr: ["Exercices à haute intensité", "Situations de match", "Plans de jeu tactiques", "Préparation mentale & tournois"],
+  },
+  "svc-junior": {
+    nameFr: "Développement jeunes",
+    shortDescriptionFr: "Un coaching adapté à l'âge des jeunes joueurs.",
+    descriptionFr: "Des séances ludiques et structurées pour construire des bases solides, la coordination et le goût durable du jeu.",
+    bestForFr: "Les jeunes de tous niveaux.",
+    includesFr: ["Fondamentaux & coordination", "Progressions adaptées à l'âge", "Motricité & agilité", "Initiation au match"],
+  },
+  "svc-padel": {
+    nameFr: "Coaching padel",
+    shortDescriptionFr: "Un coaching technique et tactique pour le padel.",
+    descriptionFr: "Apprenez les techniques et le placement propres au padel, des bases jusqu'au jeu avancé avec les vitres.",
+    bestForFr: "Les joueurs de padel de tous niveaux.",
+    includesFr: ["Technique padel", "Jeu avec les vitres", "Placement & tactique", "Stratégie en double"],
+  },
+};
+
+export const demoServices: Service[] = demoServicesBase.map((s) => ({ ...s, ...servicesFr[s.id] }));
+
+const rule = (id: string, weekday: number, startTime: string, endTime: string): AvailabilityRule => ({
+  id,
+  weekday,
+  startTime,
+  endTime,
+  locationId: null,
+  validFrom: null,
+  validUntil: null,
+  isActive: true,
+});
+
+export const demoRules: AvailabilityRule[] = [
+  ...[1, 2, 3, 4, 5].flatMap((d) => [rule(`r-am-${d}`, d, "08:00", "12:00"), rule(`r-pm-${d}`, d, "16:00", "20:00")]),
+  rule("r-sat", 6, "09:00", "13:00"),
+];
+
+export const demoJourney: JourneyPost[] = demoJourneyBase.map((p) => ({ ...p, ...journeyFr[p.id] }));

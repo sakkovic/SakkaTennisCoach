@@ -1,0 +1,43 @@
+{
+  "name": "sami-sakka-tennis",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "vitest run",
+    "test:db": "node supabase/tests/schema.test.mjs",
+    "check": "npm run lint && npm run typecheck && npm test && npm run test:db"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.9.1",
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.117.2",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.49.0",
+    "motion": "^13.4.6",
+    "next": "16.3.8",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-hook-form": "^7.89.0",
+    "server-only": "^0.0.1",
+    "sonner": "^2.0.8",
+    "tailwind-merge": "^3.7.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.8",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^24.19.0",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.8",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "vitest": "^5.0.3"
+  }
+}
