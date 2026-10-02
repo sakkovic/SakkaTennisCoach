@@ -126,8 +126,6 @@ export const fr: Dictionary = {
       previous: "Publications précédentes",
       next: "Publications suivantes",
       seeAllMoments: "Voir tous les moments",
-      pause: "Mettre le diaporama en pause",
-      play: "Lancer le diaporama",
       goTo: "Aller à la publication {n}",
       empty: "De nouvelles histoires du court arrivent bientôt — suivez-nous sur Instagram en attendant.",
     },
