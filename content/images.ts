@@ -9,6 +9,9 @@ export type SiteImage = { src: string; alt: string; altFr: string };
 
 const unsplash = (id: string) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&q=80`;
 
+/** Photos the coach uploaded to Supabase Storage (public "journey" bucket). */
+const storage = (file: string) => `https://jkmixxkozgtydwsvsmsx.supabase.co/storage/v1/object/public/journey/${file}`;
+
 export const images = {
   hero: {
     src: "/images/sakkaTennishomepage1.jpg",
@@ -16,9 +19,9 @@ export const images = {
     altFr: "Sami Sakka sur un court de tennis éclairé, avec lance-balles, cibles et matériel d'entraînement",
   },
   coachPortrait: {
-    src: unsplash("1637071669555-cf9afa251964"),
-    alt: "Coach standing on a tennis court holding a racquet",
-    altFr: "Coach debout sur un court de tennis, raquette à la main",
+    src: storage("sakkaTennishomepage2.jpg"),
+    alt: "Sami Sakka smiling in a navy tracksuit in front of a tournament sponsor wall",
+    altFr: "Sami Sakka souriant en survêtement bleu marine devant un mur de sponsors de tournoi",
   },
   coachingSession: {
     src: unsplash("1634840542403-1a9b1067aaa0"),
