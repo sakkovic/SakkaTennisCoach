@@ -5,9 +5,15 @@
  * so the full booking + admin flow can be exercised locally. It is never enabled
  * in production unless DEMO_MODE=true is set explicitly.
  */
-export const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
-export const supabaseKey =
-  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
+// Supabase is only used on the server, so the names work with or without the NEXT_PUBLIC_ prefix.
+export const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || "").trim();
+export const supabaseKey = (
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+  process.env.SUPABASE_PUBLISHABLE_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  process.env.SUPABASE_ANON_KEY ||
+  ""
+).trim();
 
 export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseKey);
 
