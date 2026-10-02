@@ -21,8 +21,8 @@ the dev server restarts. Demo mode is disabled in production builds.
 ## Connect Supabase (production)
 
 1. Create a project at [supabase.com](https://supabase.com).
-2. **SQL Editor** → run `supabase/migrations/20260930000000_init.sql`, then `supabase/seed.sql`
-   (or `supabase db push` with the Supabase CLI).
+2. **SQL Editor** → run every file in `supabase/migrations/` **in filename order**, then `supabase/seed.sql`
+   (or `supabase db push` with the Supabase CLI, then the seed).
 3. Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SUPABASE_URL` and
    `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (Project Settings → API).
 4. **Create the coach account:** Authentication → Users → *Add user* (email + password). Then in the SQL Editor:
