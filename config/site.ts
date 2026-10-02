@@ -14,7 +14,10 @@ export const siteConfig = {
   description:
     "Private tennis lessons and performance coaching with Sami Sakka. Personalized training for beginners to competitive players — technique, tactics, fitness and mental strength. Book your lesson online.",
 
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  /** Public URL. On Vercel without a custom domain, falls back to the project's production address. */
+  url:
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000"),
   locale: "en",
   /** IANA timezone the coach works in — drives "today", notice periods and slot times. */
   timezone: "Africa/Tunis",
